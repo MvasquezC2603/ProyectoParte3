@@ -1,0 +1,52 @@
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String
+  role      String   @default("user")
+  createdAt DateTime @default(now())
+}
+
+model Team {
+  id        Int      @id @default(autoincrement())
+  name      String
+  city      String?
+  logoUrl   String?
+  players   Player[]
+  createdAt DateTime @default(now())
+
+  // relaciones inversas para Match
+  homeMatches Match[] @relation("home")
+  awayMatches Match[] @relation("away")
+}
+
+model Player {
+  id        Int      @id @default(autoincrement())
+  name      String
+  number    Int
+  team      Team     @relation(fields: [teamId], references: [id])
+  teamId    Int
+  createdAt DateTime @default(now())
+
+  @@unique([name, teamId])
+}
+
+model Match {
+  id       Int      @id @default(autoincrement())
+  homeId   Int
+  awayId   Int
+  dateTime DateTime
+
+  homeTeam Team @relation("home", fields: [homeId], references: [id])
+  awayTeam Team @relation("away", fields: [awayId], references: [id])
+  @@index([homeId])
+  @@index([awayId])
+}

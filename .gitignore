@@ -1,0 +1,22 @@
+# generales
+.DS_Store
+Thumbs.db
+.vscode/
+*.log
+npm-debug.log*
+
+# frontend (Vite/React)
+node_modules/
+dist/
+build/
+
+# backend (Node/Prisma)
+backend/node_modules/
+backend/.env
+backend/dev.db
+backend/prisma/*.db-journal
+backend/.prisma/
+
+# root envs
+.env
+*.local
